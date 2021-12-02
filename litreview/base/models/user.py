@@ -6,5 +6,5 @@ class UserFollow(models.Model):
     followed_user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, related_name="followed_by")
 
     class Meta:
-        app_label = "app"
+        app_label = "base"
         unique_together = ("user", "followed_user")

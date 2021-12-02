@@ -10,7 +10,7 @@ class Ticket(models.Model):
     time_created = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        app_label = "app"
+        app_label = "base"
 
 class Review(models.Model):
     ticket = models.ForeignKey(Ticket, on_delete=models.CASCADE)
@@ -21,4 +21,4 @@ class Review(models.Model):
     time_created = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        app_label = "app"
+        app_label = "base"
