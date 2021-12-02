@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h2>Inscription</h2>
+  <form method="post">
+    {% csrf_token %}
+    <div>
+      <label type="text">Nom d'utilisateur</label>
+      {{ form.username }}
+      <p> {{ form.errors.username }} </p>
+      <label type="text" >Mot de passe</label>
+      {{ form.password1 }}
+      <p> {{ form.errors.password1 }} </p>
+      <label type="text" >Confirmer mot de passe</label>
+      {{ form.password2 }}
+      <p> {{ form.errors.password2 }} </p>
+    </div>
+    <a href="{% url 'home' %}"><button>Retourner</button></a>
+    <button type="submit">S'inscrire</button>
+  </form>
+{% endblock %}

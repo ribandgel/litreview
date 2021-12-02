@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2> Inscrivez-vous maintenant </h2>
+<a href="{% url 'signup' %}"><button> S'inscrire </button></a>
+<h2>Connectez-vous</h2>
+<form method="post">
+  {% csrf_token %}
+  {{ form.non_field_errors }}
+  <div class="form-group">
+      
+      <label for="{{ form.username.id_for_label }}">Nom d'utilisateur:</label>
+      {{ form.username }}
+      {{ form.username.errors }}
+
+  </div>
+  <div class="form-group">
+     
+      <label for="{{ form.password.id_for_label }}">Mot de passe:</label>
+      {{ form.password }}
+      {{ form.password.errors }}
+  </div>
+  <button type="submit">Se connecter</button>
+</form>
+{% endblock %}
