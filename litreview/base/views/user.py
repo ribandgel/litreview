@@ -1,43 +1,40 @@
-from django.contrib.auth import login, authenticate
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
-from django.shortcuts import render, redirect
-from litreview.base.models import Ticket, Review
+from django.contrib.auth.views import LoginView
+from django.shortcuts import redirect
+from django.views.generic import ListView, TemplateView
+from django.views.generic.edit import CreateView
 
-def signup(request):
-    if request.user.is_authenticated:
-        redirect("flux")
-    if request.method == "POST":
-        form = UserCreationForm(request.POST)
-        if form.is_valid():
-            form.save()
-            username = form.cleaned_data.get("username")
-            raw_password = form.cleaned_data.get("password1")
-            user = authenticate(username=username, password=raw_password)
-            login(request, user)
+from litreview.base.forms import LoginForm, SignUpForm
+
+
+class FluxView(TemplateView):
+    template_name = "flux.html"
+
+    def get(self, request):
+        if not request.user.is_authenticated:
+            return redirect("home")
+        return super().get(self, request)
+
+
+class HomeView(LoginView):
+    template_name = "home.html"
+    form_class = LoginForm
+    success_url = "/flux/"
+
+    def get(self, request):
+        if request.user.is_authenticated:
             return redirect("flux")
-    else:
-        form = UserCreationForm()
-    return render(request, "registration/signup.html", {"form": form})
+        return super().get(self, request)
 
-def home(request):
-    if request.user.is_authenticated:
-        redirect("flux")
-    if request.method == "POST":
-        form = AuthenticationForm(request.POST)
-        if form.is_valid():
-            form.save()
-            username = form.cleaned_data.get("username")
-            raw_password = form.cleaned_data.get("password1")
-            user = authenticate(username=username, password=raw_password)
-            login(request, user)
-            return redirect("flux")
-    else:
-        form = AuthenticationForm()
-    return render(request, "home.html", {"form": form})
 
-def flux(request):
-    if not request.user.is_authenticated:
-        redirect("home")
-    tickets = Ticket.objects.filter(user=request.user).order_by("time_created")
-    reviews = Review.objects.filter(user=request.user).order_by("time_created")
-    return render(request, "flux.html", {"tickets": tickets, "reviews": reviews})
+class SignUpView(CreateView):
+    template_name = "registration/signup.html"
+    form_class = SignUpForm
+    success_url = "/flux/"
+
+
+class SubscriptionsView(ListView):
+    template_name = "subscriptions.html"
+
+
+class PostsView(ListView):
+    template_name = "posts.html"
