@@ -4,6 +4,7 @@ from django.views.generic import ListView, TemplateView
 from django.views.generic.edit import CreateView
 
 from litreview.base.forms import LoginForm, SignUpForm
+from litreview.base.models import UserFollow
 
 
 class FluxView(TemplateView):
@@ -30,11 +31,6 @@ class SignUpView(CreateView):
     template_name = "registration/signup.html"
     form_class = SignUpForm
     success_url = "/flux/"
-
-
-class SubscriptionsView(ListView):
-    template_name = "subscriptions.html"
-
 
 class PostsView(ListView):
     template_name = "posts.html"

@@ -17,7 +17,7 @@ from django.contrib import admin
 from django.contrib.auth.views import LogoutView
 from django.urls import path
 
-from litreview.base.views import FluxView, HomeView, PostsView, SignUpView, SubscriptionsView
+from litreview.base.views import FluxView, HomeView, PostsView, SignUpView, SubscriptionsView, CreateSubscriptionView, DeleteSubscriptionView
 
 urlpatterns = [
     path("admin/", admin.site.urls),
@@ -27,4 +27,6 @@ urlpatterns = [
     path("subscriptions/", SubscriptionsView.as_view(), name="subscriptions"),
     path("posts/", PostsView.as_view(), name="posts"),
     path("logout/", LogoutView.as_view(), name="logout"),
+    path("follow/", CreateSubscriptionView.as_view(), name="follow"),
+    path("unfollow/<int:pk>/", DeleteSubscriptionView.as_view(), name="unfollow")
 ]
