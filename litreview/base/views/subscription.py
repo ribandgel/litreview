@@ -38,6 +38,7 @@ class CreateSubscriptionView(FormView):
 
 class DeleteSubscriptionView(DeleteView):
     model = UserFollow
+    template_name = 'subscriptions.html'
     success_url = '/subscriptions/'
 
     def post(self, request, *args, **kwargs):
