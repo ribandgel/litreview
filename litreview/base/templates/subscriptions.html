@@ -15,7 +15,6 @@
 	        	</td>
 	        	<td>
 	        		<a href="{% url 'unfollow' pk=subscription.followed_user.id %}">
-	        			{% csrf_token %}
 		        		<button type="submit" value="DELETE">
 		        			Se désabonner
 		        		</button>

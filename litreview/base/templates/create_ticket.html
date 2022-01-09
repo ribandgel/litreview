@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block title %}Create ticket{% endblock %}
+
+{% block content %}
+ <form method="post">
+    {% csrf_token %}
+    <div>
+      <label type="text">Titre</label>
+      {{ form.title }}
+      <p> {{ form.errors.title }} </p>
+      <label type="text" >Description</label>
+      {{ form.description }}
+      <p> {{ form.errors.description }} </p>
+      <label type="text" >Image</label>
+      {{ form.image }}
+      <p> {{ form.errors.image }} </p>
+    </div>
+    <button type="submit">Envoyer</button>
+  </form>
+{% endblock %}

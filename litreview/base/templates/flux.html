@@ -3,5 +3,54 @@
 {% block title %}Flux{% endblock %}
 
 {% block content %}
-<p> Critiques </p>
+<a href="{% url 'create_ticket' %}"> <button type="button"> Demander une critique </button></a>
+<p> Créer une critique </p>
+{{ tickets }}
+{% for ticket in tickets %}
+	<div>
+		<div>
+			<p> 
+				{% if username == ticket.user.username %} 
+					Vous avez demandé une critique 
+				{% else %}
+					{{ ticket.user.username }} a demandé une critique
+				{% endif %} 
+			</p>
+			<p>
+				{{ ticket.time_created }}
+			</p>
+		</div>
+		<div>
+			<p> {{ ticket.title }} </p>
+			<p> {{ ticket.description }} </p>
+		</div>
+		<div>
+			{{ ticket.image }}
+		</div>
+		{% if username != ticket.user.username or ticket.reviews.count > 0 %} <button type="button"><a href="{% url 'home' %}"> Créer une critique </a></button> {% endif %}
+	</div>
+{% endfor %}
+{% for review in reviews %}
+	<div>
+		<div>
+			<p> 
+				{% if username == review.user.username %} 
+					Vous avez posté une critique 
+				{% else %}
+					{{ review.user.username }} a posté une critique
+				{% endif %} 
+			</p>
+			<p>
+				review.time_created
+			</p>
+		</div>
+		<div>
+			<p> {{ review.rating }} </p>
+			<p> {{ review.headline }} </p>
+			<p> {{ review.body }} </p>
+		</div>
+	</div>
+{% endfor %}
+{{ reviews }}
+
 {% endblock %}
