@@ -4,8 +4,7 @@
 
 {% block content %}
 <a href="{% url 'create_ticket' %}"> <button type="button"> Demander une critique </button></a>
-<p> Créer une critique </p>
-{{ tickets }}
+<a href="{% url 'create_review' %}"> <button type="button"> Créer une critique </button></a>
 {% for ticket in tickets %}
 	<div>
 		<div>
@@ -27,10 +26,11 @@
 		<div>
 			{{ ticket.image }}
 		</div>
-		{% if username != ticket.user.username or ticket.reviews.count > 0 %} <button type="button"><a href="{% url 'home' %}"> Créer une critique </a></button> {% endif %}
+		{% if username != ticket.user.username or ticket.reviews.count > 0 %} <button type="button"><a href="{% url 'create_review' %}"> Créer une critique </a></button> {% endif %}
 	</div>
 {% endfor %}
 {% for review in reviews %}
+	{{ review.ticket }}
 	<div>
 		<div>
 			<p> 
@@ -41,7 +41,7 @@
 				{% endif %} 
 			</p>
 			<p>
-				review.time_created
+				{{ review.time_created }}
 			</p>
 		</div>
 		<div>
@@ -49,8 +49,13 @@
 			<p> {{ review.headline }} </p>
 			<p> {{ review.body }} </p>
 		</div>
+		{% if review.ticket %}
+			<div>
+				<p> Ticket - {{ review.ticket.user.username }}</p>
+				<p> {{review.ticket.title}} </p>
+				<p> {{review.ticket.image}} </p>
+			</div>
+		{% endif %}
 	</div>
 {% endfor %}
-{{ reviews }}
-
 {% endblock %}
