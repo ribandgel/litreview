@@ -1,6 +1,7 @@
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 
+from .constants import RATING_CHOICES
 from .user import User
 
 
@@ -18,7 +19,7 @@ class Ticket(models.Model):
 class Review(models.Model):
     ticket = models.ForeignKey(Ticket, on_delete=models.CASCADE)
     rating = models.PositiveSmallIntegerField(
-        validators=[MinValueValidator(0), MaxValueValidator(5)]
+        validators=[MinValueValidator(0), MaxValueValidator(5)], choices=RATING_CHOICES
     )
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     headline = models.CharField(max_length=128)
