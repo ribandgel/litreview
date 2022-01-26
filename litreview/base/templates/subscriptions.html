@@ -1,20 +1,21 @@
 {% extends 'base.html' %}
 {% block content %}
+<div class="container text-center">
 <h2> Suivre d'autres utilisateurs </h2>
 	<form method="post" action="{% url 'follow' %}">
 		{% csrf_token %}
 		<input name="followed_user" type="text"> </input> 
-		<button type="submit"> Envoyer </button>
+		<button class="btn btn-primary" type="submit"> Envoyer </button>
 	</form>
 	<h2>Subscriptions</h2>
-	<table>
+	<table class="table table-secondary">
 	    {% for subscription in object_list %}
 	        <tr>
 	        	<td>
 	        		{{ subscription.followed_user.username }}
 	        	</td>
 	        	<td>
-	        		<a href="{% url 'unfollow' pk=subscription.followed_user.id %}">
+	        		<a class="btn btn-primary" btn-primary href="{% url 'unfollow' pk=subscription.followed_user.id %}">
 		        		<button type="submit" value="DELETE">
 		        			Se désabonner
 		        		</button>
@@ -25,4 +26,5 @@
 	     	<tr> <td>Vous ne suivez aucun utilisateur pour le moment</td> </tr>
 	    {% endfor %}
 	</table>
+</div>
 {% endblock %}

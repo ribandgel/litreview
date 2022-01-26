@@ -3,33 +3,35 @@
 {% block title %}Créer une critique{% endblock %}
 
 {% block content %}
+<div class="container">
  <form method="post">
     {% csrf_token %}
     <div>
       <h2> Livre / Article </h2>
-      <label type="text">Titre</label>
+      <label class="form-label" type="text">Titre</label>
       {{ form.title }}
       <p> {{ form.errors.title }} </p>
-      <label type="text" >Description</label>
+      <label class="form-label" type="text" >Description</label>
       {{ form.description }}
       <p> {{ form.errors.description }} </p>
-      <label type="text" >Image</label>
+      <label class="form-label" type="text" >Image</label>
       {{ form.image }}
       <p> {{ form.errors.image }} </p>
     </div>
     <div>
       <h2> Critique </h2>
-      <label type="text">Titre</label>
+      <label class="form-label" type="text">Titre</label>
       {{ review.forms.0.headline }}
       <p> {{ review.forms.0.errors.headline }} </p>
-      <label type="text" >Note</label>
+      <label class="form-label" type="text" >Note</label>
       {{ review.forms.0.rating }}
       <p> {{ review.forms.0.errors.rating }} </p>
-      <label type="text" >Commentaire</label>
+      <label class="form-label" type="text" >Commentaire</label>
       {{ review.forms.0.body }}
       <p> {{ review.forms.0.errors.body }} </p>
       {{ review.management_form }}
     </div>
-    <button type="submit">Envoyer</button>
+    <button class="btn btn-secondary" type="submit">Envoyer</button>
   </form>
+</div>
 {% endblock %}
