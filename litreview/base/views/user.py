@@ -4,17 +4,18 @@ from django.shortcuts import redirect, render
 from django.views import View
 from django.views.generic import ListView
 from django.views.generic.edit import CreateView
+from django.urls import reverse_lazy
+from django.contrib.auth.mixins import LoginRequiredMixin
 
-from litreview.base.forms import LoginForm, SignUpForm, TicketForm
+from litreview.base.forms import LoginForm, SignUpForm, TicketForm, ReviewForm
 from litreview.base.models import Review, Ticket
 
 
-class FluxView(View):
+class FluxView(LoginRequiredMixin, View):
     template_name = "flux.html"
+    login_url = reverse_lazy("home")
 
     def get(self, request):
-        if not request.user.is_authenticated:
-            return redirect("home")
         tickets = Ticket.objects.all().order_by("-time_created")
         reviews = Review.objects.all().order_by("-time_created")
         return render(
@@ -23,12 +24,26 @@ class FluxView(View):
             {"tickets": tickets, "reviews": reviews, "username": request.user.username},
         )
 
+class PostView(LoginRequiredMixin, View):
+    template_name = "posts.html"
+    login_url = reverse_lazy("home")
 
-class CreateTicketView(CreateView):
+    def get(self, request):
+        tickets = Ticket.objects.filter(user=request.user).order_by("-time_created")
+        reviews = Review.objects.filter(user=request.user).order_by("-time_created")
+        return render(
+            request,
+            self.template_name,
+            {"tickets": tickets, "reviews": reviews, "username": request.user.username},
+        )
+
+
+class CreateTicketView(LoginRequiredMixin, CreateView):
     model = Ticket
     template_name = "create_ticket.html"
     form_class = TicketForm
-    success_url = "/flux/"
+    success_url = reverse_lazy("flux")
+    login_url = reverse_lazy("home")
 
     def form_valid(self, form):
         ticket = form.save(commit=False)
@@ -36,17 +51,46 @@ class CreateTicketView(CreateView):
         ticket.save()
         return super(CreateTicketView, self).form_valid(form)
 
+class CreateReviewToTicketView(LoginRequiredMixin, CreateView):
+    model = Review
+    template_name = "create_review_to_ticket.html"
+    form_class = ReviewForm
+    success_url = reverse_lazy("flux")
+    login_url = reverse_lazy("home")
 
-class CreateReviewView(CreateView):
+    def form_valid(self, form):
+        breakpoint()
+        review = form.save(commit=False)
+        review.user = self.request.user
+        pk = self.request.resolver_match.kwargs.pop("pk")
+        try:
+            review.ticket = Ticket.objects.get(id=pk)
+        except Ticket.DoesNotExist:
+            return reverse_lazy("flux")
+        review.save()
+        return super(CreateReviewToTicketView, self).form_valid(form)
+
+    def get(self, request, pk):
+        try:
+            ticket = Ticket.objects.get(id=pk)
+        except Ticket.DoesNotExist:
+            return reverse_lazy("flux")
+        return render(
+            request,
+            self.template_name,
+            {"ticket": ticket, "form": self.get_form()},
+        )
+
+
+class CreateReviewView(LoginRequiredMixin, CreateView):
     template_name = "create_review.html"
     success_url = "/flux/"
     model = Ticket
     fields = ("title", "description", "image")
     exclude = "user"
+    login_url = reverse_lazy("home")
 
     def get_context_data(self, **kwargs):
-        if not self.request.user.is_authenticated:
-            redirect("home")
         ReviewFormSet = inlineformset_factory(
             Ticket, Review, fields=("headline", "body", "rating"), exclude=("user",), max_num=1
         )
@@ -88,6 +132,3 @@ class SignUpView(CreateView):
     form_class = SignUpForm
     success_url = "/flux/"
 
-
-class PostsView(ListView):
-    template_name = "posts.html"

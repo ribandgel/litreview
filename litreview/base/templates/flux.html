@@ -3,59 +3,85 @@
 {% block title %}Flux{% endblock %}
 
 {% block content %}
-<a href="{% url 'create_ticket' %}"> <button type="button"> Demander une critique </button></a>
-<a href="{% url 'create_review' %}"> <button type="button"> Créer une critique </button></a>
+<div class="container-fluid">
+	<div class="row justify-content-center">
+		<div class="col text-center">
+			<a href="{% url 'create_ticket' %}"> <button type="button" class="btn btn-secondary"> Demander une critique </button></a>
+		</div>
+		<div class="col text-center">
+			<a class="btn btn-primary" href="{% url 'create_review' %}"> Créer une critique </a>
+		</div>
+	</div>
 {% for ticket in tickets %}
-	<div>
-		<div>
-			<p> 
-				{% if username == ticket.user.username %} 
-					Vous avez demandé une critique 
-				{% else %}
-					{{ ticket.user.username }} a demandé une critique
-				{% endif %} 
-			</p>
-			<p>
-				{{ ticket.time_created }}
-			</p>
+	<div class="row border">
+		<div class="col">
+			<div class="row">
+				<p> 
+					{% if username == ticket.user.username %} 
+						Vous avez demandé une critique 
+					{% else %}
+						{{ ticket.user.username }} a demandé une critique
+					{% endif %} 
+				</p>
+				<p>
+					{{ ticket.time_created }}
+				</p>
+			</div>
+			<div class="row">
+				<p> {{ ticket.title }} </p>
+			</div>
+			<div class="row">
+				<p> {{ ticket.description }} </p>
+			</div>
+			<div class="row">
+				{{ ticket.image }}
+			</div>
+			<div class="row justify-content-end ">
+				<div class="col-3">
+					{% if username != ticket.user.username and ticket.reviews.count == 0 %} 
+						<a class="btn btn-primary" href="{% url 'create_review_to_ticket' pk=ticket.id %}"> Créer une critique </a>
+					{% endif %}
+				</div>
+			</div>
 		</div>
-		<div>
-			<p> {{ ticket.title }} </p>
-			<p> {{ ticket.description }} </p>
-		</div>
-		<div>
-			{{ ticket.image }}
-		</div>
-		{% if username != ticket.user.username or ticket.reviews.count > 0 %} <button type="button"><a href="{% url 'create_review' %}"> Créer une critique </a></button> {% endif %}
 	</div>
 {% endfor %}
 {% for review in reviews %}
-	{{ review.ticket }}
-	<div>
-		<div>
-			<p> 
-				{% if username == review.user.username %} 
-					Vous avez posté une critique 
-				{% else %}
-					{{ review.user.username }} a posté une critique
-				{% endif %} 
-			</p>
-			<p>
-				{{ review.time_created }}
-			</p>
-		</div>
-		<div>
-			<p> {{ review.rating }} </p>
-			<p> {{ review.headline }} </p>
-			<p> {{ review.body }} </p>
+	<div class="row border">
+		<div class="col">
+			<div class="row">
+				<p> 
+					{% if username == review.user.username %} 
+						Vous avez posté une critique 
+					{% else %}
+						{{ review.user.username }} a posté une critique
+					{% endif %} 
+				</p>
+				<p>
+					{{ review.time_created }}
+				</p>
+			</div>
+		
+			<div class="row">
+				<p> {{ review.headline }} </p>
+				<p> {{ review.rating }} </p>
+			</div>
+			<div class="row">
+				<p> {{ review.body }} </p>
+			</div>
 		</div>
 		{% if review.ticket %}
-			<div>
-				<p> Ticket - {{ review.ticket.user.username }}</p>
-				<p> {{review.ticket.title}} </p>
-				<p> {{review.ticket.image}} </p>
+			<div class="container-fluid">
+				<div class="row">
+					<p> Ticket - {{ review.ticket.user.username }}</p>
+				</div>
+				<div class="row">
+					<p> {{review.ticket.title}} </p>
+					<p> {{review.ticket.image}} </p>
+				</div>
 			</div>
 		{% endif %}
 	</div>
 {% endfor %}
+</div>
 {% endblock %}

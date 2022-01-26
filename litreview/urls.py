@@ -19,12 +19,13 @@ from django.urls import path
 
 from litreview.base.views import (
     CreateReviewView,
+    CreateReviewToTicketView,
     CreateSubscriptionView,
     CreateTicketView,
     DeleteSubscriptionView,
     FluxView,
+    PostView,
     HomeView,
-    PostsView,
     SignUpView,
     SubscriptionsView,
 )
@@ -34,11 +35,12 @@ urlpatterns = [
     path("signup/", SignUpView.as_view(), name="signup"),
     path("", HomeView.as_view(), name="home"),
     path("flux/", FluxView.as_view(), name="flux"),
+    path("posts/", PostView.as_view(), name="posts"),
     path("subscriptions/", SubscriptionsView.as_view(), name="subscriptions"),
-    path("posts/", PostsView.as_view(), name="posts"),
-    path("logout/", LogoutView.as_view(), name="logout"),
+    path("logout/", LogoutView.as_view(next_page=""), name="logout"),
     path("follow/", CreateSubscriptionView.as_view(), name="follow"),
     path("unfollow/<int:pk>/", DeleteSubscriptionView.as_view(), name="unfollow"),
     path("tickets/create_ticket", CreateTicketView.as_view(), name="create_ticket"),
     path("reviews/create_review", CreateReviewView.as_view(), name="create_review"),
+    path("reviews/<int:pk>/create_review_to_ticket", CreateReviewToTicketView.as_view(), name="create_review_to_ticket")
 ]
