@@ -3,8 +3,8 @@
 {% block title %}Flux{% endblock %}
 
 {% block content %}
-<div class="container-fluid">
-	<div class="row justify-content-center">
+<div class="container">
+	<div class="row py-2 justify-content-center">
 		<div class="col text-center">
 			<a href="{% url 'create_ticket' %}"> <button type="button" class="btn btn-secondary"> Demander une critique </button></a>
 		</div>
@@ -13,9 +13,9 @@
 		</div>
 	</div>
 {% for ticket in tickets %}
-	<div class="row border">
+	<div class="row mb-2 border">
 		<div class="col">
-			<div class="row">
+			<div class="row row-cols-2">
 				<p> 
 					{% if username == ticket.user.username %} 
 						Vous avez demandé une critique 
@@ -47,9 +47,9 @@
 	</div>
 {% endfor %}
 {% for review in reviews %}
-	<div class="row border">
+	<div class="grid mb-2 border width-100" style="--bs-rows: 2; --bs-columns:2;">
 		<div class="col">
-			<div class="row">
+			<div class="row row-cols-2">
 				<p> 
 					{% if username == review.user.username %} 
 						Vous avez posté une critique 
@@ -71,7 +71,7 @@
 			</div>
 		</div>
 		{% if review.ticket %}
-			<div class="container-fluid">
+			<div class="g-start-2 border m-5" style="grid-row: 2">
 				<div class="row">
 					<p> Ticket - {{ review.ticket.user.username }}</p>
 				</div>

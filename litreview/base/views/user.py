@@ -7,7 +7,7 @@ from django.views.generic.edit import CreateView
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
 
-from litreview.base.forms import LoginForm, SignUpForm, TicketForm, ReviewForm
+from litreview.base.forms import LoginForm, SignUpForm, TicketForm, ReviewForm, ReviewFormSet
 from litreview.base.models import Review, Ticket
 
 
@@ -85,20 +85,18 @@ class CreateReviewToTicketView(LoginRequiredMixin, CreateView):
 class CreateReviewView(LoginRequiredMixin, CreateView):
     template_name = "create_review.html"
     success_url = "/flux/"
-    model = Ticket
-    fields = ("title", "description", "image")
-    exclude = "user"
+    form_class = TicketForm
     login_url = reverse_lazy("home")
 
     def get_context_data(self, **kwargs):
-        ReviewFormSet = inlineformset_factory(
-            Ticket, Review, fields=("headline", "body", "rating"), exclude=("user",), max_num=1
+        ReviewForm = inlineformset_factory(
+            Ticket, Review, fields=("headline", "body", "rating"), exclude=("user",), max_num=1, formset=ReviewFormSet
         )
         data = super().get_context_data(**kwargs)
         if self.request.POST:
-            data["review"] = ReviewFormSet(self.request.POST)
+            data["review"] = ReviewForm(self.request.POST)
         else:
-            data["review"] = ReviewFormSet()
+            data["review"] = ReviewForm()
         return data
 
     def form_valid(self, form):
