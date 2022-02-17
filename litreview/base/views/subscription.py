@@ -47,5 +47,5 @@ class CreateSubscriptionView(LoginRequiredMixin, FormView):
 class DeleteSubscriptionView(LoginRequiredMixin, DeleteView):
     model = UserFollow
     template_name = "subscriptions.html"
-    success_url = "/subscriptions/"
+    success_url = reverse_lazy("subscriptions")
     login_url = reverse_lazy("home")

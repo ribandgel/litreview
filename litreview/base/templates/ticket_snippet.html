@@ -18,9 +18,6 @@
 		<div class="row">
 			<p> {{ post.description }} </p>
 		</div>
-		<div class="row">
-			{{ post.image }}
-		</div>
 		<div class="row justify-content-end">
 			{% if username != post.user.username and post.reviews.count == 0 %} 
 				<div class="col-3">
@@ -32,7 +29,10 @@
 					<a class="btn btn-primary mb-3" href="{% url 'update_ticket' pk=post.id %}"> Modifier </a>
 				</div>
 				<div class="col-3">
-					<a class="btn btn-primary mb-3" href="{% url 'delete_ticket' pk=post.id %}"> Supprimer </a>
+					<form action="{% url 'delete_ticket' pk=post.id %}" method="POST">
+						{% csrf_token %}
+						<input class="btn btn-primary mb-3" type="submit" value="Supprimer"/>
+					</form>
 				</div>
 			{% endif %}
 		</div>

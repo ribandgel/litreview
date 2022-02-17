@@ -38,7 +38,10 @@
 			<a class="btn btn-primary mb-3" href="{% url 'update_review' pk=post.id %}"> Modifier </a>
 		</div>
 		<div class="col-3">
-			<a class="btn btn-primary mb-3" href="{% url 'delete_review' pk=post.id %}"> Supprimer </a>
+			<form action="{% url 'delete_review' pk=post.id %}" method="POST">
+				{% csrf_token %}
+				<input class="btn btn-primary mb-3" type="submit" value="Supprimer"/>
+			</form>
 		</div>
 	</div>
 	{% endif %}

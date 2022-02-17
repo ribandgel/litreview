@@ -71,7 +71,6 @@ class CreateReviewToTicketView(LoginRequiredMixin, CreateView):
     login_url = reverse_lazy("home")
 
     def form_valid(self, form):
-        breakpoint()
         review = form.save(commit=False)
         review.user = self.request.user
         pk = self.request.resolver_match.kwargs.pop("pk")
@@ -132,32 +131,36 @@ class CreateReviewView(LoginRequiredMixin, CreateView):
         return super().form_valid(form)
 
 
-class ReviewUpdateView(UpdateView):
+class ReviewUpdateView(LoginRequiredMixin, UpdateView):
     model = Review
     form_class = ReviewForm
     template_name = "update_review.html"
     success_url = reverse_lazy("posts")
+    login_url = reverse_lazy("home")
 
 
-class ReviewDeleteView(DeleteView):
+class ReviewDeleteView(LoginRequiredMixin, DeleteView):
     model = Review
     form_class = ReviewForm
     template_name = "posts.html"
     success_url = reverse_lazy("posts")
+    login_url = reverse_lazy("home")
 
 
-class TicketUpdateView(UpdateView):
+class TicketUpdateView(LoginRequiredMixin, UpdateView):
     model = Ticket
     form_class = TicketForm
     template_name = "update_ticket.html"
     success_url = reverse_lazy("posts")
+    login_url = reverse_lazy("home")
 
 
-class TicketDeleteView(DeleteView):
+class TicketDeleteView(LoginRequiredMixin, DeleteView):
     model = Ticket
     form_class = TicketForm
     template_name = "posts.html"
     success_url = reverse_lazy("posts")
+    login_url = reverse_lazy("home")
 
 
 class HomeView(LoginView):
