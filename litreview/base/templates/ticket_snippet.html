@@ -21,7 +21,7 @@
 		<div class="row">
 			{{ post.image }}
 		</div>
-		<div class="row justify-content-end ">
+		<div class="row justify-content-end">
 			{% if username != post.user.username and post.reviews.count == 0 %} 
 				<div class="col-3">
 						<a class="btn btn-primary" href="{% url 'create_review_to_ticket' pk=post.id %}"> Créer une critique </a>

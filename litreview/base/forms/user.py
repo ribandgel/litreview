@@ -1,5 +1,6 @@
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
-from django.forms import ModelForm, BaseInlineFormSet
+from django.forms import BaseInlineFormSet, ModelForm
+
 from litreview.base.models import Review, Ticket, User
 
 
@@ -11,7 +12,7 @@ class SignUpForm(UserCreationForm):
     def __init__(self, *args, **kwargs):
         super(SignUpForm, self).__init__(*args, **kwargs)
         for visible in self.visible_fields():
-            visible.field.widget.attrs['class'] = 'form-control'
+            visible.field.widget.attrs["class"] = "form-control"
 
 
 class LoginForm(AuthenticationForm):
@@ -22,7 +23,7 @@ class LoginForm(AuthenticationForm):
     def __init__(self, *args, **kwargs):
         super(LoginForm, self).__init__(*args, **kwargs)
         for visible in self.visible_fields():
-            visible.field.widget.attrs['class'] = 'form-control'
+            visible.field.widget.attrs["class"] = "form-control"
 
 
 class TicketForm(ModelForm):
@@ -34,7 +35,7 @@ class TicketForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super(TicketForm, self).__init__(*args, **kwargs)
         for visible in self.visible_fields():
-            visible.field.widget.attrs['class'] = 'form-control'
+            visible.field.widget.attrs["class"] = "form-control"
 
 
 class ReviewForm(ModelForm):
@@ -46,12 +47,12 @@ class ReviewForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super(ReviewForm, self).__init__(*args, **kwargs)
         for visible in self.visible_fields():
-            visible.field.widget.attrs['class'] = 'form-control'
+            visible.field.widget.attrs["class"] = "form-control"
+
 
 class ReviewFormSet(BaseInlineFormSet):
-     def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs):
         super(ReviewFormSet, self).__init__(*args, **kwargs)
         for form in self.forms:
             for visible in form.visible_fields():
-                visible.field.widget.attrs['class'] = 'form-control'
-
+                visible.field.widget.attrs["class"] = "form-control"

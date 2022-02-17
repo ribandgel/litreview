@@ -1,8 +1,8 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect
+from django.urls import reverse_lazy
 from django.views.generic import ListView
 from django.views.generic.edit import DeleteView, FormView
-from django.urls import reverse_lazy
-from django.contrib.auth.mixins import LoginRequiredMixin
 
 from litreview.base.forms import SubscriptionForm
 from litreview.base.models import User, UserFollow
@@ -17,6 +17,7 @@ class SubscriptionsView(LoginRequiredMixin, ListView):
         context["subscribers"] = self.request.user.followed_by.all()
         context["subscriptions"] = self.request.user.following.all()
         return context
+
 
 class CreateSubscriptionView(LoginRequiredMixin, FormView):
     model = UserFollow
