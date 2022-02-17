@@ -1,2 +1,4 @@
+from .ticket import Review, Ticket
 from .user import User, UserFollow
-from .ticket import Ticket, Review
+
+__all__ = ["User", "UserFollow", "Ticket", "Review"]

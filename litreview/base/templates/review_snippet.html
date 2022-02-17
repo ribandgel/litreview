@@ -32,4 +32,14 @@
 			</div>
 		</div>
 	{% endif %}
+	{% if username == post.user.username %} 
+	<div class="row justify-content-end">
+		<div class="col-3">
+			<a class="btn btn-primary mb-3" href="{% url 'update_review' pk=post.id %}"> Modifier </a>
+		</div>
+		<div class="col-3">
+			<a class="btn btn-primary mb-3" href="{% url 'delete_review' pk=post.id %}"> Supprimer </a>
+		</div>
+	</div>
+	{% endif %}
 </div>

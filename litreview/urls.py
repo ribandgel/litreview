@@ -18,17 +18,19 @@ from django.contrib.auth.views import LogoutView
 from django.urls import path
 
 from litreview.base.views import (
-    CreateReviewView,
     CreateReviewToTicketView,
+    CreateReviewView,
     CreateSubscriptionView,
     CreateTicketView,
     DeleteSubscriptionView,
     FluxView,
     HomeView,
     PostView,
+    ReviewDeleteView,
     ReviewUpdateView,
     SignUpView,
     SubscriptionsView,
+    TicketDeleteView,
     TicketUpdateView,
 )
 
@@ -44,7 +46,13 @@ urlpatterns = [
     path("unfollow/<int:pk>/", DeleteSubscriptionView.as_view(), name="unfollow"),
     path("tickets/create_ticket", CreateTicketView.as_view(), name="create_ticket"),
     path("tickets/<int:pk>/update_ticket", TicketUpdateView.as_view(), name="update_ticket"),
-    path("tickets/<int:pk>/delete_ticket", TicketUpdateView.as_view(), name="delete_ticket"),
+    path("tickets/<int:pk>/delete_ticket", TicketDeleteView.as_view(), name="delete_ticket"),
     path("reviews/create_review", CreateReviewView.as_view(), name="create_review"),
-    path("reviews/<int:pk>/create_review_to_ticket", CreateReviewToTicketView.as_view(), name="create_review_to_ticket")
+    path("tickets/<int:pk>/update_review", ReviewUpdateView.as_view(), name="update_review"),
+    path("tickets/<int:pk>/delete_review", ReviewDeleteView.as_view(), name="delete_review"),
+    path(
+        "reviews/<int:pk>/create_review_to_ticket",
+        CreateReviewToTicketView.as_view(),
+        name="create_review_to_ticket",
+    ),
 ]
