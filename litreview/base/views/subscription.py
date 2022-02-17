@@ -1,20 +1,24 @@
 from django.shortcuts import redirect
 from django.views.generic import ListView
 from django.views.generic.edit import DeleteView, FormView
+from django.urls import reverse_lazy
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 from litreview.base.forms import SubscriptionForm
 from litreview.base.models import User, UserFollow
 
 
-class SubscriptionsView(ListView):
+class SubscriptionsView(LoginRequiredMixin, ListView):
     template_name = "subscriptions.html"
     model = UserFollow
 
-    def get_queryset(self):
-        return UserFollow.objects.filter(user=self.request.user)
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["subscribers"] = self.request.user.followed_by.all()
+        context["subscriptions"] = self.request.user.following.all()
+        return context
 
-
-class CreateSubscriptionView(FormView):
+class CreateSubscriptionView(LoginRequiredMixin, FormView):
     model = UserFollow
     fields = ["followed_user"]
     success_url = "/subscriptions/"
@@ -30,7 +34,7 @@ class CreateSubscriptionView(FormView):
             except User.DoesNotExist:
                 pass
             else:
-                if request.user.is_authenticated:
+                if request.user != target:
                     try:
                         UserFollow.objects.create(user=request.user, followed_user=target)
                     except Exception:
@@ -39,13 +43,8 @@ class CreateSubscriptionView(FormView):
         return redirect(self.success_url)
 
 
-class DeleteSubscriptionView(DeleteView):
+class DeleteSubscriptionView(LoginRequiredMixin, DeleteView):
     model = UserFollow
     template_name = "subscriptions.html"
     success_url = "/subscriptions/"
-
-    def post(self, request, *args, **kwargs):
-        subscription = self.get_object()
-        if subscription.user != request.user:
-            return redirect("subscriptions")
-        return super().post(request, args, kwargs)
+    login_url = reverse_lazy("home")

@@ -6,14 +6,13 @@
   <title>{% block title %}LITReview{% endblock %}</title>
   {% if user.is_authenticated %}
     <header id="header">
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-      <h1 class="nav-link active" id="menu-title"> LITReview </h1>    
-      <a class="nav-link active" href="{% url 'flux' %}">Flux</a>
-      <a class="nav-link active" href="{% url 'posts' %}">Posts</a>
-      <a class="nav-link active"href="{% url 'subscriptions' %}">Abonnements</a>
-      <a class="nav-link active" href="{% url 'logout' %}">Se déconnecter</a>
-      <span class="line"></span>
-    </nav>
+      <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <h1 class="nav-link active" id="menu-title"> LITReview </h1>    
+        <a class="nav-link active" href="{% url 'flux' %}">Flux</a>
+        <a class="nav-link active" href="{% url 'posts' %}">Posts</a>
+        <a class="nav-link active"href="{% url 'subscriptions' %}">Abonnements</a>
+        <a class="nav-link active" href="{% url 'logout' %}">Se déconnecter</a>
+      </nav>
     </header>
   {% endif %}
 </head>

@@ -1,0 +1,40 @@
+<div class="row mb-2 border">
+	<div class="col">
+		<div class="row row-cols-2">
+			<p> 
+				{% if username == post.user.username %} 
+					Vous avez demandé une critique 
+				{% else %}
+					{{ post.user.username }} a demandé une critique
+				{% endif %} 
+			</p>
+			<p>
+				{{ post.time_created }}
+			</p>
+		</div>
+		<div class="row">
+			<p> {{ post.title }} </p>
+		</div>
+		<div class="row">
+			<p> {{ post.description }} </p>
+		</div>
+		<div class="row">
+			{{ post.image }}
+		</div>
+		<div class="row justify-content-end ">
+			{% if username != post.user.username and post.reviews.count == 0 %} 
+				<div class="col-3">
+						<a class="btn btn-primary" href="{% url 'create_review_to_ticket' pk=post.id %}"> Créer une critique </a>
+				</div>
+			{% endif %}
+			{% if username == post.user.username %} 
+				<div class="col-3">
+					<a class="btn btn-primary mb-3" href="{% url 'update_ticket' pk=post.id %}"> Modifier </a>
+				</div>
+				<div class="col-3">
+					<a class="btn btn-primary mb-3" href="{% url 'delete_ticket' pk=post.id %}"> Supprimer </a>
+				</div>
+			{% endif %}
+		</div>
+	</div>
+</div>
