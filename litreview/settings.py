@@ -9,12 +9,12 @@ https://docs.djangoproject.com/en/3.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
-
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-APP_DIR = Path(__file__).parent.joinpath("app")
+APP_DIR = Path(__file__).parent.joinpath("base")
 
 
 # Quick-start development settings - unsuitable for production
@@ -27,6 +27,9 @@ SECRET_KEY = "django-insecure-#k!s9zogs)qmorn3=to#r-#ko*3mnpu)17vjrg7ql!pv&!a!28
 DEBUG = True
 
 ALLOWED_HOSTS = []
+
+MEDIA_URL = "/media/"
+MEDIA_ROOT = os.path.join(APP_DIR, "media")
 
 
 # Application definition

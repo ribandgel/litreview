@@ -4,20 +4,28 @@
 
 {% block content %}
 <div class="container">
-{% if not posts %}
-	<div class="row py-1 justify-content-center">
+	<div class="row py-2 justify-content-center">
 		<div class="col text-center">
-			Nothing to show
+			<a href="{% url 'create_ticket' %}"> <button type="button" class="btn btn-secondary"> Demander une critique </button></a>
+		</div>
+		<div class="col text-center">
+			<a class="btn btn-primary" href="{% url 'create_review' %}"> Créer une critique </a>
 		</div>
 	</div>
-{% else %}
-	{% for post in posts %}
-		{% if post.content_type == "TICKET" %}
-			{% include "ticket_snippet.html" %}
-		{% elif post.content_type == "REVIEW" %}
-			{% include "review_snippet.html" %}
-		{% endif %}
-	{% endfor %}
+	{% if not posts %}
+		<div class="row py-1 justify-content-center">
+			<div class="col text-center">
+				Nothing to show
+			</div>
+		</div>
+	{% else %}
+		{% for post in posts %}
+			{% if post.content_type == "TICKET" %}
+				{% include "ticket_snippet.html" %}
+			{% elif post.content_type == "REVIEW" %}
+				{% include "review_snippet.html" %}
+			{% endif %}
+		{% endfor %}
 {% endif %}
 </div>
 {% endblock %}
