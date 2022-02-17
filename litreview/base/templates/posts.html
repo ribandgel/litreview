@@ -3,48 +3,21 @@
 {% block title %}Vos posts{% endblock %}
 
 {% block content %}
-{% for ticket in tickets %}
-	<div>
-		<div>
-			<p> 
-				Vous avez demandé une critique 
-			</p>
-			<p>
-				{{ ticket.time_created }}
-			</p>
-		</div>
-		<div>
-			<p> {{ ticket.title }} </p>
-			<p> {{ ticket.description }} </p>
-		</div>
-		<div>
-			{{ ticket.image }}
+<div class="container">
+{% if not posts %}
+	<div class="row py-1 justify-content-center">
+		<div class="col text-center">
+			Nothing to show
 		</div>
 	</div>
-{% endfor %}
-{% for review in reviews %}
-	{{ review.ticket }}
-	<div>
-		<div>
-			<p> 
-				Vous avez publié une critique
-			</p>
-			<p>
-				{{ review.time_created }}
-			</p>
-		</div>
-		<div>
-			<p> {{ review.rating }} </p>
-			<p> {{ review.headline }} </p>
-			<p> {{ review.body }} </p>
-		</div>
-		{% if review.ticket %}
-			<div>
-				<p> Ticket - {{ review.ticket.user.username }}</p>
-				<p> {{review.ticket.title}} </p>
-				<p> {{review.ticket.image}} </p>
-			</div>
+{% else %}
+	{% for post in posts %}
+		{% if post.content_type == "TICKET" %}
+			{% include "ticket_snippet.html" %}
+		{% elif post.content_type == "REVIEW" %}
+			{% include "review_snippet.html" %}
 		{% endif %}
-	</div>
-{% endfor %} 
+	{% endfor %}
+{% endif %}
+</div>
 {% endblock %}

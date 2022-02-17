@@ -7,23 +7,32 @@
 		<input name="followed_user" type="text"> </input> 
 		<button class="btn btn-primary" type="submit"> Envoyer </button>
 	</form>
-	<h2>Subscriptions</h2>
+	<h2>Abonnements</h2>
 	<table class="table table-secondary">
-	    {% for subscription in object_list %}
+	    {% for subscription in subscriptions %}
 	        <tr>
 	        	<td>
 	        		{{ subscription.followed_user.username }}
 	        	</td>
 	        	<td>
-	        		<a class="btn btn-primary" btn-primary href="{% url 'unfollow' pk=subscription.followed_user.id %}">
-		        		<button type="submit" value="DELETE">
-		        			Se désabonner
-		        		</button>
-	        		</a>
+	        		<form  method="post" action="{% url 'unfollow' pk=subscription.followed_user.id %}">
+	        			{% csrf_token %}
+		        		<input class="btn btn-primary" type="submit" value="Se désabonner"/>
+	        		</form>
 	        	</td>
 	        </tr>
 	     {% empty %}
 	     	<tr> <td>Vous ne suivez aucun utilisateur pour le moment</td> </tr>
+	    {% endfor %}
+	</table>
+	<h2>Abonnés</h2>
+	<table class="table table-secondary">
+	    {% for subscriber in subscribers %}
+	        <tr>
+	        	{{ subscriber.user.username }}
+	        </tr>
+	     {% empty %}
+	     	<tr> <td>Vous n'avez aucun abonné pour le moment</td> </tr>
 	    {% endfor %}
 	</table>
 </div>

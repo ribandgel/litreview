@@ -12,76 +12,20 @@
 			<a class="btn btn-primary" href="{% url 'create_review' %}"> Créer une critique </a>
 		</div>
 	</div>
-{% for ticket in tickets %}
-	<div class="row mb-2 border">
-		<div class="col">
-			<div class="row row-cols-2">
-				<p> 
-					{% if username == ticket.user.username %} 
-						Vous avez demandé une critique 
-					{% else %}
-						{{ ticket.user.username }} a demandé une critique
-					{% endif %} 
-				</p>
-				<p>
-					{{ ticket.time_created }}
-				</p>
-			</div>
-			<div class="row">
-				<p> {{ ticket.title }} </p>
-			</div>
-			<div class="row">
-				<p> {{ ticket.description }} </p>
-			</div>
-			<div class="row">
-				{{ ticket.image }}
-			</div>
-			<div class="row justify-content-end ">
-				<div class="col-3">
-					{% if username != ticket.user.username and ticket.reviews.count == 0 %} 
-						<a class="btn btn-primary" href="{% url 'create_review_to_ticket' pk=ticket.id %}"> Créer une critique </a>
-					{% endif %}
-				</div>
-			</div>
+{% if not posts %}
+	<div class="row py-1 justify-content-center">
+		<div class="col text-center">
+			Nothing to show
 		</div>
 	</div>
-{% endfor %}
-{% for review in reviews %}
-	<div class="grid mb-2 border width-100" style="--bs-rows: 2; --bs-columns:2;">
-		<div class="col">
-			<div class="row row-cols-2">
-				<p> 
-					{% if username == review.user.username %} 
-						Vous avez posté une critique 
-					{% else %}
-						{{ review.user.username }} a posté une critique
-					{% endif %} 
-				</p>
-				<p>
-					{{ review.time_created }}
-				</p>
-			</div>
-		
-			<div class="row">
-				<p> {{ review.headline }} </p>
-				<p> {{ review.rating }} </p>
-			</div>
-			<div class="row">
-				<p> {{ review.body }} </p>
-			</div>
-		</div>
-		{% if review.ticket %}
-			<div class="g-start-2 border m-5" style="grid-row: 2">
-				<div class="row">
-					<p> Ticket - {{ review.ticket.user.username }}</p>
-				</div>
-				<div class="row">
-					<p> {{review.ticket.title}} </p>
-					<p> {{review.ticket.image}} </p>
-				</div>
-			</div>
+{% else %}
+	{% for post in posts %}
+		{% if post.content_type == "TICKET" %}
+			{% include "ticket_snippet.html" %}
+		{% elif post.content_type == "REVIEW" %}
+			{% include "review_snippet.html" %}
 		{% endif %}
-	</div>
-{% endfor %}
+	{% endfor %}
+{% endif %}
 </div>
 {% endblock %}

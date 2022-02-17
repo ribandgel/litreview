@@ -1,0 +1,6 @@
+<div class="container">
+    <form method="post">{% csrf_token %}
+        {{ form.as_p }}
+        <input class="btn btn-primary" type="submit" value="Update">
+    </form>
+</div>

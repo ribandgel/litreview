@@ -24,10 +24,12 @@ from litreview.base.views import (
     CreateTicketView,
     DeleteSubscriptionView,
     FluxView,
-    PostView,
     HomeView,
+    PostView,
+    ReviewUpdateView,
     SignUpView,
     SubscriptionsView,
+    TicketUpdateView,
 )
 
 urlpatterns = [
@@ -37,10 +39,12 @@ urlpatterns = [
     path("flux/", FluxView.as_view(), name="flux"),
     path("posts/", PostView.as_view(), name="posts"),
     path("subscriptions/", SubscriptionsView.as_view(), name="subscriptions"),
-    path("logout/", LogoutView.as_view(next_page=""), name="logout"),
+    path("logout/", LogoutView.as_view(next_page="home"), name="logout"),
     path("follow/", CreateSubscriptionView.as_view(), name="follow"),
     path("unfollow/<int:pk>/", DeleteSubscriptionView.as_view(), name="unfollow"),
     path("tickets/create_ticket", CreateTicketView.as_view(), name="create_ticket"),
+    path("tickets/<int:pk>/update_ticket", TicketUpdateView.as_view(), name="update_ticket"),
+    path("tickets/<int:pk>/delete_ticket", TicketUpdateView.as_view(), name="delete_ticket"),
     path("reviews/create_review", CreateReviewView.as_view(), name="create_review"),
     path("reviews/<int:pk>/create_review_to_ticket", CreateReviewToTicketView.as_view(), name="create_review_to_ticket")
 ]

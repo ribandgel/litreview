@@ -1,42 +1,43 @@
 from django.contrib.auth.views import LoginView
 from django.forms import inlineformset_factory
-from django.shortcuts import redirect, render
-from django.views import View
+from django.shortcuts import redirect, render, get_object_or_404
 from django.views.generic import ListView
-from django.views.generic.edit import CreateView
+from django.views.generic.base import TemplateView
+from django.views.generic.edit import CreateView, UpdateView
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db.models import CharField, Value
+from itertools import chain
 
 from litreview.base.forms import LoginForm, SignUpForm, TicketForm, ReviewForm, ReviewFormSet
 from litreview.base.models import Review, Ticket
 
 
-class FluxView(LoginRequiredMixin, View):
+class FluxView(LoginRequiredMixin, TemplateView):
     template_name = "flux.html"
     login_url = reverse_lazy("home")
 
-    def get(self, request):
-        tickets = Ticket.objects.all().order_by("-time_created")
-        reviews = Review.objects.all().order_by("-time_created")
-        return render(
-            request,
-            self.template_name,
-            {"tickets": tickets, "reviews": reviews, "username": request.user.username},
-        )
+    def get_context_data(self, **kwargs):
+        tickets = Ticket.objects.filter(user__in=self.request.user.following.all().values("followed_user")).annotate(content_type=Value("TICKET", CharField()))
+        reviews = Review.objects.filter(user__in=self.request.user.following.all().values("followed_user")).annotate(content_type=Value("REVIEW", CharField()))
+        context = super().get_context_data(**kwargs)
+        posts = sorted(chain(tickets, reviews), key= lambda post: post.time_created, reverse=True)
+        context["posts"] = posts
+        context["username"] = self.request.user.username
+        return context
 
-class PostView(LoginRequiredMixin, View):
+class PostView(LoginRequiredMixin, TemplateView):
     template_name = "posts.html"
     login_url = reverse_lazy("home")
 
-    def get(self, request):
-        tickets = Ticket.objects.filter(user=request.user).order_by("-time_created")
-        reviews = Review.objects.filter(user=request.user).order_by("-time_created")
-        return render(
-            request,
-            self.template_name,
-            {"tickets": tickets, "reviews": reviews, "username": request.user.username},
-        )
-
+    def get_context_data(self, **kwargs):
+        tickets = Ticket.objects.filter(user=self.request.user).annotate(content_type=Value("TICKET", CharField()))
+        reviews = Review.objects.filter(user=self.request.user).annotate(content_type=Value("REVIEW", CharField()))
+        context = super().get_context_data(**kwargs)
+        posts = sorted(chain(tickets, reviews), key= lambda post: post.time_created, reverse=True)
+        context["posts"] = posts
+        context["username"] = self.request.user.username
+        return context
 
 class CreateTicketView(LoginRequiredMixin, CreateView):
     model = Ticket
@@ -70,17 +71,17 @@ class CreateReviewToTicketView(LoginRequiredMixin, CreateView):
         review.save()
         return super(CreateReviewToTicketView, self).form_valid(form)
 
-    def get(self, request, pk):
-        try:
-            ticket = Ticket.objects.get(id=pk)
-        except Ticket.DoesNotExist:
-            return reverse_lazy("flux")
-        return render(
-            request,
-            self.template_name,
-            {"ticket": ticket, "form": self.get_form()},
-        )
-
+    def get_context_data(self, **kwargs):
+        ticket = get_object_or_404(Ticket, id=self.kwargs.get("pk"))
+        context = super().get_context_data(**kwargs)
+        context["ticket"] = ticket
+        return context
+        '''     return render(
+                     request,
+                     self.template_name,
+                     {"ticket": ticket, "form": self.get_form()},
+                 )
+        '''
 
 class CreateReviewView(LoginRequiredMixin, CreateView):
     template_name = "create_review.html"
@@ -113,17 +114,20 @@ class CreateReviewView(LoginRequiredMixin, CreateView):
             review.save()
         return super().form_valid(form)
 
+class ReviewUpdateView(UpdateView):
+    model = Review
+    form_class = ReviewForm
+    template_name = "update_review.html"
+
+class TicketUpdateView(UpdateView):
+    model = Ticket
+    form_class = TicketForm
+    template_name = "update_ticket.html"
 
 class HomeView(LoginView):
     template_name = "home.html"
     form_class = LoginForm
     success_url = "/flux/"
-
-    def get(self, request):
-        if request.user.is_authenticated:
-            return redirect("flux")
-        return super().get(self, request)
-
 
 class SignUpView(CreateView):
     template_name = "registration/signup.html"

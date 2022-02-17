@@ -1,25 +1,33 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h2> Inscrivez-vous maintenant </h2>
-<a href="{% url 'signup' %}"><button> S'inscrire </button></a>
-<h2>Connectez-vous</h2>
-<form method="post">
-  {% csrf_token %}
-  {{ form.non_field_errors }}
-  <div class="form-group">
-      
-      <label for="{{ form.username.id_for_label }}">Nom d'utilisateur:</label>
-      {{ form.username }}
-      {{ form.username.errors }}
+<div class="container">
+  <div class="row py-2 justify-content-center">
+    <div class="col text-center">
+      <h2 class="pb-3"> Inscrivez-vous maintenant </h2>
+      <a href="{% url 'signup' %}" class="btn btn-primary"> S'inscrire </a>
+    </div>
+    <div class="col text-center">
+      <h2>Connectez-vous</h2>
+      <form method="post">
+        {% csrf_token %}
+        {{ form.non_field_errors }}
+        <div class="form-group">
+            
+            <label for="{{ form.username.id_for_label }}">Nom d'utilisateur:</label>
+            {{ form.username }}
+            {{ form.username.errors }}
 
+        </div>
+        <div class="form-group">
+           
+            <label for="{{ form.password.id_for_label }}">Mot de passe:</label>
+            {{ form.password }}
+            {{ form.password.errors }}
+        </div>
+        <button class="btn btn-primary" type="submit">Se connecter</button>
+      </form>
+    </div>
   </div>
-  <div class="form-group">
-     
-      <label for="{{ form.password.id_for_label }}">Mot de passe:</label>
-      {{ form.password }}
-      {{ form.password.errors }}
-  </div>
-  <button type="submit">Se connecter</button>
-</form>
+</div>
 {% endblock %}

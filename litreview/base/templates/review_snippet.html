@@ -1,0 +1,35 @@
+<div class="grid mb-2 border width-100" style="--bs-rows: 2; --bs-columns:2;">
+	<div class="col">
+		<div class="row row-cols-2">
+			<p> 
+				{% if username == post.user.username %} 
+					Vous avez posté une critique 
+				{% else %}
+					{{ post.user.username }} a posté une critique
+				{% endif %} 
+			</p>
+			<p>
+				{{ post.time_created }}
+			</p>
+		</div>
+	
+		<div class="row">
+			<p> {{ post.headline }} </p>
+			<p> {{ post.rating }} </p>
+		</div>
+		<div class="row">
+			<p> {{ post.body }} </p>
+		</div>
+	</div>
+	{% if post.ticket %}
+		<div class="g-start-2 border m-5" style="grid-row: 2">
+			<div class="row">
+				<p> Ticket - {{ post.ticket.user.username }}</p>
+			</div>
+			<div class="row">
+				<p> {{post.ticket.title}} </p>
+				<p> {{post.ticket.image}} </p>
+			</div>
+		</div>
+	{% endif %}
+</div>
