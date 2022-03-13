@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
+<div class="container">
   <h2>Inscription</h2>
   <form method="post">
     {% csrf_token %}
@@ -15,7 +16,8 @@
       {{ form.password2 }}
       <p> {{ form.errors.password2 }} </p>
     </div>
-    <a href="{% url 'home' %}"><button type="button">Retourner</button></a>
-    <button type="submit">S'inscrire</button>
+    <a href="{% url 'home' %}"><button class="btn btn-secondary" type="button">Retourner</button></a>
+    <button class="btn btn-secondary" type="submit">S'inscrire</button>
   </form>
+</div>
 {% endblock %}
