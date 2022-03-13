@@ -19,7 +19,7 @@
 			<p> {{ post.description }} </p>
 		</div>
 		{% if post.image %}
-			<img src="{{post.image.url}}">
+			<img class="img-thumbnail" style="width: 300px; height: 300px;" src="{{post.image.url}}">
 		{% endif %}
 		<div class="row justify-content-end">
 			{% if username != post.user.username and post.reviews.count == 0 %} 

@@ -166,7 +166,6 @@ class TicketDeleteView(LoginRequiredMixin, DeleteView):
 class HomeView(LoginView):
     template_name = "home.html"
     form_class = LoginForm
-    success_url = reverse_lazy("flux")
 
 
 class SignUpView(CreateView):

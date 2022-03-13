@@ -3,22 +3,12 @@
 {% block title %}Créer une critique{% endblock %}
 
 {% block content %}
+<div class="container">
 <div>
     Vous êtes en train de poster en réponse à
-    <div>
-      <p> 
-          {{ ticket.user.username }} a demandé une critique      </p>
-      <p>
-        {{ ticket.time_created }}
-      </p>
-    </div>
-    <div>
-      <p> {{ ticket.title }} </p>
-      <p> {{ ticket.description }} </p>
-    </div>
-    <div>
-      {{ ticket.image }}
-    </div>
+    {% with post=ticket %}
+      {% include "ticket_snippet.html" %}
+    {% endwith %}
 </div>
  <form method="post">
     {% csrf_token %}
@@ -34,6 +24,7 @@
       {{ form.body }}
       <p> {{ form.errors.body }} </p>
     </div>
-    <button type="submit">Envoyer</button>
+    <button class="btn btn-primary" type="submit">Envoyer</button>
   </form>
+</div>
 {% endblock %}
